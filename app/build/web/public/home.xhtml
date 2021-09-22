@@ -1,0 +1,761 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <!--index page-->
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    
+    <ui:composition template="/public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <h:panelGroup  style="padding-top: 20px">
+                <p:tabView style="margin-left: 0px; width: 100%; font-size: 16px; margin-top: 20px" dynamic="true">
+                    <p:tab >
+                        <f:facet name="title">
+                           <h:outputText value=" Atividades de Tele-educação">
+                                <i class="fa fa-table"></i>
+                           </h:outputText>
+                        </f:facet>
+                        <h:form>
+                            
+                            <div class="container-fluid">   
+                                <script>
+                                    $a(document).ready(function() {
+                                        $( "#btn_radar" ).click(function() {
+                                            
+                                            $( "#radar" ).toggle( "slow", function() {
+                                              // Animation complete.
+                                            });
+                                        });
+                                    });
+                                </script>
+                                <button id="btn_radar" type="button" class="btn btn-light" style="margin: 10px">Radar</button>
+                                <div id="radar" >
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <script type="text/javascript">
+                                                google.charts.load("current", {packages:['corechart']});
+                                                google.charts.setOnLoadCallback(drawBasic);
+
+                                                function drawBasic() {
+
+                                                    var data = google.visualization.arrayToDataTable(#{graficosController.get4MonthsSummaryDashboard()});
+
+                                                    var view = new google.visualization.DataView(data);
+
+
+                                                    var options = {
+                                                        chartArea: {width: '85%', height: '85%'},
+                                                        hAxis: {
+                                                          textStyle:{
+                                                            bold:true,
+                                                            italic: false
+                                                          },
+
+                                                          minValue: 0
+                                                        },
+                                                        colors: ['#236693', '#3498db', '#02cc8f', '#66ffd0'],
+                                                        legend: {
+                                                            position: 'top',
+                                                            maxLines: 4
+                                                        },                                                        
+                                                        animation:{
+                                                            "startup": true,
+                                                            duration: 1000,
+                                                            easing: 'in'
+                                                        },
+                                                        annotations: {
+                                                            textStyle: {
+                                                                fontName: 'Times-Roman',
+                                                                fontSize: 16,
+                                                                bold: true,
+                                                                italic: false,
+                                                                color: '#000000',  // The color of the text outline.
+                                                                opacity: 0.8          // The transparency of the text.
+                                                            }
+                                                        }
+                                                    };
+
+
+                                                    var obj1 = {
+                                                          id:"col1",
+                                                          calc: "stringify",
+                                                          sourceColumn: 1,
+                                                          type: "string",
+                                                          role: "annotation"
+                                                        };
+
+                                                    var columns = [0, 1,
+                                                        obj1, 2,
+                                                        {
+                                                          id:"col2",
+                                                          calc: "stringify",
+                                                          sourceColumn: 2,
+                                                          type: "string",
+                                                          role: "annotation"
+                                                        }, 3,
+                                                        {
+                                                          id:"col3",
+                                                          calc: "stringify",
+                                                          sourceColumn: 3,
+                                                          type: "string",
+                                                          role: "annotation"
+                                                        }, 4,
+                                                        {
+                                                          id:"col4",
+                                                          calc: "stringify",
+                                                          sourceColumn: 4,
+                                                          type: "string",
+                                                          role: "annotation"
+                                                        }
+                                                    ];
+
+                                                    view.setColumns(columns);
+
+                                                    var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_material"));
+
+                                                    //var chart = new google.charts.Bar(document.getElementById('barchart_values'));
+                                                    //var chart = new google.visualization.ColumnChart(document.getElementById("barchart_values"));
+
+                                                    chart.draw(view, options);
+                                                }
+                                            </script>
+                                            <h3>
+                                                <d>Atividades </d>
+                                                <span class="label label-primary">Evolução Quadrimestral</span>
+                                            </h3>
+                                            <div id="columnchart_material" style="width: 100%; height: 300px;"></div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <script type="text/javascript">
+                                                google.charts.load('current', {'packages':['gauge']});
+                                                google.charts.setOnLoadCallback(drawChart);
+
+                                                function drawChart() {
+
+                                                  var data = google.visualization.arrayToDataTable(#{graficosController.getAttendanceGaugeTodatDashboard()});
+
+                                                  var options = {
+                                                    width: 400, height: 120,
+                                                    redFrom: 90, redTo: 100,
+                                                    yellowFrom:75, yellowTo: 90,
+                                                    minorTicks: 5
+                                                  };
+
+                                                  var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+                                                  chart.draw(data, options);
+                                                }
+                                            </script>
+                                            <h4>
+                                                <d>Participações </d>
+                                                <span class="label label-primary"> #{graficosController.currentMonthYear}</span>
+                                            </h4>
+                                            <div id="chart_div" style="width: 100%; height: 150px;"></div>
+                                            <div><a class="label label-primary" style="color: white; font-size: 16px">p/d</a> Participações onlines registradas hoje</div>
+                                            <br/>
+                                            <div><a class="label label-primary" style="color: white; font-size: 16px; margin-top: 10px">m/p</a> Média das participações por atividade realizadas</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <script type="text/javascript">
+                                                google.charts.load('current', {'packages':['corechart']});
+                                                google.charts.setOnLoadCallback(drawChart);
+
+                                                function drawChart() {
+
+                                                    var data = new google.visualization.arrayToDataTable(#{graficosController.getAttendanceRowsCurrentMonth()});
+                                                    var view = new google.visualization.DataView(data);
+
+                                                    var options = {
+                                                        colors: ['#236693', '#66dbff'],
+                                                        hAxis: {title: 'Dia',  titleTextStyle: {color: '#365dcc'}},
+                                                        vAxis: {minValue: 0},
+                                                        legend: {
+                                                            position: 'top',
+                                                            maxLines: 4
+                                                        }
+                                                    };
+
+                                                    var chart = new google.visualization.AreaChart(document.getElementById('chart_div_area'));
+                                                    chart.draw(view, options);
+                                                }
+                                            </script>
+                                            <h3>
+                                                <d>Participações / Atividades </d>
+                                                <span class="label label-primary">#{graficosController.currentMonthYear}</span>
+                                            </h3>
+                                            <d>Total de Atividades: <span style="color: #365dcc">#{graficosController.totalAtividadesMes}</span>, Total de Participações: <span style="color: #365dcc">#{graficosController.totalPartMes}</span></d>
+                                            <div id="chart_div_area" style="width: 100%; height: 200px;"></div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <h4>
+                                                <d>#{graficosController.currentMonthYear} </d>
+                                                <span class="label label-primary">Top 4 Municípios</span>
+                                            </h4>
+                                            <script type="text/javascript">
+                                                google.charts.load('current', {'packages':['table']});
+                                                google.charts.setOnLoadCallback(drawTable);
+
+                                                function drawTable() {
+                                                    var data = new google.visualization.DataTable();
+                                                    data.addColumn('string', 'Município');
+                                                    data.addColumn('number', 'Total de Participações');
+                                                    data.addRows(#{graficosController.getTop4MunicipiosDashboard()});
+
+                                                  var table = new google.visualization.Table(document.getElementById('table_div'));
+
+                                                  table.draw(data, { width: '100%', height: '100%', sort: 'disable'});
+                                                }
+                                            </script>
+                                            <div id="table_div" style="width: 100%; height: 200px;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <script>
+                                                google.charts.load('current', {packages: ['corechart', 'bar']});
+                                                google.charts.setOnLoadCallback(drawBarColors);
+
+                                                function drawBarColors() {
+                                                      var data = google.visualization.arrayToDataTable(#{graficosController.getObjetosViewsDashboard()});
+
+                                                      var options = {
+                                                        chartArea: {width: '100%'},
+                                                        colors: ['#236693', '#3498db', '#02cc8f', '#66ffd0'],
+                                                        hAxis: {
+                                                          title: 'Visualizações',
+                                                          minValue: 0
+                                                        },
+                                                        vAxis: {
+                                                          title: 'City'
+                                                        }
+                                                      };
+                                                      var chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
+                                                      chart.draw(data, options);
+                                                    }
+                                            </script>
+                                            <h3>
+                                                <d>Objetos de Aprendizagem </d>
+                                                <span class="label label-primary">Top 5 em Visualizações</span>
+                                            </h3>
+                                            <d>Total geral das visualizações: </d> <span style="color: #365dcc">#{graficosController.chartTotal}</span>
+                                            <div id="bar_chart" style="width: 100%; height: 300px;"></div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <script type="text/javascript">
+                                                google.charts.load("current", {packages:["corechart"]});
+                                                google.charts.setOnLoadCallback(drawChart);
+                                                function drawChart() {
+                                                  var data = google.visualization.arrayToDataTable(#{graficosController.getGrauSatisfacaoDashboard()});
+
+                                                  var options = {
+                                                     colors: ['#236693', '#3498db', '#02cc8f', '#66ffd0', '#8466ff'],
+                                                    is3D: true,
+                                                    'chartArea': {'width': '100%', 'height': '85%'},
+                                                    legend: {
+                                                        alignment: 'center'
+                                                    }
+                                                  };
+
+                                                  var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                                                  chart.draw(data, options);
+                                                }
+                                            </script>
+                                            <h3>
+                                                <d>Avaliações </d>
+                                                <span class="label label-primary">Grau de Satisfação Geral</span>
+                                            </h3>
+                                            <div id="piechart_3d" style="width: 100%; height: 350px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                        <div class="col-lg-3">
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-list-alt fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="font-size: 36px">#{solicitacaoController.qtdSolicitacoes()}</div>
+                                                            <div>Solicitações</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                                    <a href="../solicitacoes/list_solicitacao.xhtml">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Ver Detalhes</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-danger">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-calendar-times-o fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="font-size: 36px">#{ataController.atividadesIndeferidas().size()}</div>
+                                                            <div>Indeferidas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                                    <h:commandLink styleClass="filho" action="#{ataController.atividadePage(4)}">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Ver Detalhes</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </h:commandLink>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-calendar-check-o fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="font-size: 36px">#{ataController.atividadesPendentes().size()}</div>
+                                                            <div>Pendentes</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                                    <h:commandLink styleClass="filho" action="#{ataController.atividadePage(1)}">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Ver Detalhes</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </h:commandLink>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-danger">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-close fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="font-size: 36px">#{ataController.atividadesCanceladas().size()}</div>
+                                                            <div>Canceladas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                                    <h:commandLink styleClass="filho" action="#{ataController.atividadePage(2)}">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Ver Detalhes</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </h:commandLink>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="row">
+                                    <h:panelGroup rendered="#{loginController.usuario.nivel == 1}">
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-file fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="font-size: 36px">#{ataController.atasPendentes().size()}</div>
+                                                            <div>Atas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <a href="../atas/list_atas.xhtml">
+                                                    <div class="panel-footer">
+                                                        <span class="pull-left">Ver Detalhes</span>
+                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <i class="fa fa-check fa-5x"></i>
+                                                    </div>
+                                                    <div class="col-xs-9 text-right">
+                                                        <div style="font-size: 36px">#{ataController.atividadesRealizadas().size()}</div>
+                                                        <div>Realizadas</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h:commandLink styleClass="filho" action="#{ataController.atividadePage(3)}">
+                                                <div class="panel-footer">
+                                                    <span class="pull-left">Ver Detalhes</span>
+                                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Relatórios de Tele-educação" >
+                        <h:form id="reports">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-users fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/>
+                                                    <div style="font-size: 24px">Palestras</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="#{ataController.prepareReportPalestras()}">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-calculator fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/>
+                                                    <div style="font-size: 18px">Resumo de Atividades</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/reports/view_sum_atividades.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-play-circle fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/>
+                                                    <div style="font-size: 18px">Objetos de Aprendizagem</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/reports/view_list_objeto_aprendizagem.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Gráficos de Tele-educação" >
+                        <h:form id="charts"> 
+                           <div class="row">
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-pie-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div >Atividades / Tipo</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="#{ataController.atividadePage(5)}">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div >Profissões</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_top10_profissao.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div >Decs</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_top10_decs.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div >Estados</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_top10_estados.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right" >
+                                                    <br/><br/>
+                                                    <div >Cidades <br/>/ Estado</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_top10_cidades.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div >Atividades / ano</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_resumo_year.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div>Municipios / UBS</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_municipios_finalidade.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bar-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div>Objetos Apr. / Visualizações</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_top10_objetos_views.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-pie-chart fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div>Avaliações</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_avaliacoes.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 pull-left">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-table fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <br/><br/>
+                                                    <div>Metas de participações</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h:commandLink styleClass="filho" target="_blank" action="/charts/view_municipios_metas.xhtml">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">Ver Detalhes</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </h:form>
+                    </p:tab>
+
+                </p:tabView>
+            </h:panelGroup>
+            
+               
+            
+        </ui:define>    
+        <ui:define name="title">        
+            SINTS - Sistema Integrado Telessaúde MA       
+        </ui:define>
+    </ui:composition>
+</html>

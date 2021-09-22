@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Editar Perfil 
+                            </h1>
+                        </div>
+                    </div>
+                    <h:form id="formUser">
+                        <p:messages id="messages" />
+                        
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel class="control-label col-md-2 form-label-right" 
+                                           value="#{bundlePessoa.CreatePessoaLabel_nome}" for="nome" />
+                            <h:panelGroup class="col-sm-8">
+                                <p:messages for="nome" id="nomeMsg" />
+                                <h:inputText class="form-control form-nome" 
+                                             pt:placeholder="Ex: Maria" 
+                                             id="nome"
+                                             value="#{loginController.pessoa.nome}" 
+                                             title="#{bundlePessoa.CreatePessoaTitle_nome}"
+                                             required="true" 
+                                             requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_nome}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel  class="control-label col-md-2 form-label-right" 
+                                            value="#{bundlePessoa.CreatePessoaLabel_sobrenome}" for="sobrenome" />
+                            <h:panelGroup class="col-sm-8">
+                                <p:messages for="sobrenome" id="sobrenomeMsg" />
+                                <h:inputText id="sobrenome"  
+                                              pt:placeholder="Ex: da Silva" 
+                                             class="form-control form-sobrenome"
+                                             value="#{loginController.pessoa.sobrenome}" 
+                                             title="#{bundlePessoa.CreatePessoaTitle_sobrenome}" 
+                                             required="true" 
+                                             requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_sobrenome}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_cpf}" for="cpf" />
+                            <h:panelGroup class="col-sm-8">
+                                <p:messages for="cpf" id="cpfMsg" />
+                                <h:inputText id="cpf" 
+                                             pt:placeholder="Apenas números" 
+                                             class="form-control col-sm-2 form-cpf"
+                                             value="#{loginController.pessoa.cpf}"
+                                             title="#{bundlePessoa.CreatePessoaTitle_cpf}" 
+                                             requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_cpf}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_email}" for="email" />
+                            <h:panelGroup class="col-sm-8">
+                                <p:messages for="email" id="emailMsg" />
+                                <h:inputText id="email" 
+                                             pt:placeholder="usuario@exemplo.com" 
+                                             class="form-control col-sm-2 form-email" 
+                                             value="#{loginController.pessoa.email}"
+                                             title="#{bundlePessoa.CreatePessoaTitle_email}" 
+                                             required="true"
+                                             requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_email}">
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_celular}" for="celular" />
+                            <h:panelGroup class="col-sm-8">
+                                <p:messages for="celular" id="celularMsg" />
+                                <h:inputText id="celular"
+                                             pt:placeholder="(99) 99999-9999" 
+                                             class="form-control col-sm-2 form-cellphone"
+                                             value="#{loginController.pessoa.celular}" 
+                                             title="#{bundlePessoa.CreatePessoaTitle_celular}" 
+                                             requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_celular}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_sexo}" for="sexo" />
+                            <h:panelGroup class="col-sm-8">
+                                <h:selectOneMenu id="sexo" 
+                                                 class="form-control col-sm-2"
+                                                 value="#{loginController.pessoa.sexo}" 
+                                                 title="#{bundlePessoa.CreatePessoaTitle_sexo}" 
+                                                 required="true" 
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_sexo}">
+                                    <f:selectItem itemValue="M" itemLabel="Masculino" />
+                                    <f:selectItem itemValue="F" itemLabel="Feminino" />
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Senha Atual: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha1"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.currentPassword}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Nova Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha2"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Confirmar Nova Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha3"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password2}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:panelGroup class="col-sm-offset-6">
+                                <h:commandButton value="Salvar" action="#{loginController.updatePerfil()}" class="btn btn-primary" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                    <h:panelGroup class="lightbox-wrapper" id="create_responsavel">
+                        <ui:include src="/forms/Create_Responsavel.xhtml"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="lightbox-wrapper" id="create_instituicao">
+                        <ui:include src="/forms/Create_Instituicao.xhtml"/>
+                    </h:panelGroup>            
+                </div>
+            </div>
+        </ui:define>    
+    </ui:composition>
+</html>

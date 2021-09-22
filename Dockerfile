@@ -26,7 +26,7 @@ USER jboss
 
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interface
-ADD app/SINTS_MA.war /opt/jboss/wildfly/standalone/deployments/
+ADD app/dist/SINTS_MA.war /opt/jboss/wildfly/standalone/deployments/
 
 RUN /opt/jboss/wildfly/bin/add-user.sh admin Admin#70365 --silent
 

@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Criar Usuário
+                            </h1>
+                        </div>
+                    </div>
+                    <h:form id="formUser">
+                        <p:messages id="messages" />
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Instituição Remota:" for="instituicao" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;"  class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:message for="instituicao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                    <p:selectOneMenu id="instituicao"
+                                                     value="#{atividadeController.instituicaoId}" style="width: 100%"
+                                                     filter="true" filterMatchMode="contains">
+                                        <p:ajax update="responsavel" event="change" listener="#{atividadeController.setFuncionariosByInstituicao}"/>
+
+
+                                        <f:selectItem itemLabel="Selecione uma Instituicao" pt:selected="true"/>
+                                        <f:selectItems 
+                                            value="#{atividadeController.instituicoes}" 
+                                            var="item"
+                                            itemLabel="#{item.sigla} - #{item.descricao}"
+                                            itemValue="#{item.id}"/>
+
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                                <span class="btn btn-primary" style="float:right; display: block;" onclick="showLightBox('create_instituicao');">Criar Novo</span>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        #{atividadeController.setFuncionariosByInstituicao()}
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Responsável:" for="responsavel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:message for="responsavel" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                    <p:selectOneMenu id="responsavel" 
+                                                     filter="true" filterMatchMode="startsWith"
+                                                     style="width: 100%"
+                                                     value="#{loginController.funcionario}" >
+
+                                        <f:converter converterId="funcionarioConverter" />
+                                        <f:selectItem itemLabel="Selecione um Responsável" pt:selected="true"/>
+                                        <f:selectItems 
+                                            value="#{atividadeController.funcionarios}" 
+                                            var="item"
+                                            itemLabel="#{item.pessoa.nome} #{item.pessoa.sobrenome}"
+                                            itemValue="#{item}"/>
+                                        <f:validator validatorId="funcionario"/>
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                                <span class="btn btn-primary" style="float:right; display: block;" onclick="setInstSelected('formUser'); showLightBox('create_responsavel'); ">Criar Novo</span>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Nível de Acesso: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:message for="nivel" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                    <p:selectOneMenu id="nivel" 
+                                                    style="width: 100%"
+                                                    value="#{loginController.nivel}" >
+                                        <f:selectItems 
+                                            value="#{loginController.niveis}" 
+                                            var="item"
+                                            itemLabel="#{item.descricao}"
+                                            itemValue="#{item.nivel}"/>    
+                                   </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha1"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Confirmar Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha2"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password2}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:panelGroup class="col-sm-offset-6">
+                                <h:commandButton value="Salvar" action="#{loginController.persistUsuario()}" class="btn btn-primary" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                    <h:panelGroup class="lightbox-wrapper" id="create_responsavel">
+                        <ui:include src="/forms/Create_Responsavel.xhtml"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="lightbox-wrapper" id="create_instituicao">
+                        <ui:include src="/forms/Create_Instituicao.xhtml"/>
+                    </h:panelGroup>            
+                </div>
+            </div>
+        </ui:define>    
+    </ui:composition>
+</html>
