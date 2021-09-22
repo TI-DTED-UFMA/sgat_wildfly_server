@@ -198,7 +198,7 @@
                     </security>
                 </datasource>
                 <datasource jta="true" jndi-name="java:jboss/datasources/moodle" pool-name="mysql_moodle_rootPool" use-java-context="true" use-ccm="true">
-                    <connection-url>jdbc:mysql://telessaude.ava.huufma.br:3306/moodle</connection-url>
+                    <connection-url>jdbc:mysql://sgat_mysql:3306/moodle</connection-url>
                     <driver>mysql</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -208,7 +208,7 @@
                     </pool>
                     <security>
                         <user-name>root</user-name>
-                        <password>Nut1s@2012</password>
+                        <password>124356</password>
                     </security>
                 </datasource>
                 <drivers>
