@@ -5,8 +5,8 @@ services:
     container_name: ${APP_CONTAINER_NAME}
     build: .
     restart: unless-stopped
-    # volumes:
-    #   - ./app:/var/   
+    volumes:
+      - ./configs/wildfly:/opt/jboss/wildfly
     ports:
       - ${APP_PORT}:8080
       - ${APP_ADMIN_PORT}:9990
