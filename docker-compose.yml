@@ -1,17 +1,6 @@
 version: '3.5'
 
 services:
-  app:
-    container_name: ${APP_CONTAINER_NAME}
-    build: .
-    restart: unless-stopped
-    volumes:
-      - ./configs/jboss_wildfly:/opt/jboss/wildfly
-    ports:
-      - ${APP_PORT}:8080
-      - ${APP_ADMIN_PORT}:9990
-    networks:
-      - rede
 
   mysql:
     container_name: ${MYSQL_CONTAINER_NAME}
@@ -27,8 +16,25 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     networks:
-      - rede      
+      rede:
+        ipv4_address: 10.5.0.2
+        
+  app:
+    container_name: ${APP_CONTAINER_NAME}
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./configs/jboss_wildfly:/opt/jboss/wildfly
+    ports:
+      - ${APP_PORT}:8080
+      - ${APP_ADMIN_PORT}:9990
+    networks:      
+      rede:
+        ipv4_address: 10.5.0.3
 
 networks:
   rede:
+    ipam:
     driver: bridge
+      config:
+      - subnet: 10.5.0.0/16
