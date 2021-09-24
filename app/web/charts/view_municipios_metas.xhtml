@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Metas para participações das cidades
+                    </h1>
+                </div>
+            </div>
+            <ui:include src="Loader.xhtml"/>  
+            <h:form id="reportsForm">
+                #{graficosController.setDefaultDates()}
+                <div class="row">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Período: " for="dt1" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+
+                            <p:messages for="dt1" id="dtMsg" />
+                            <h:inputText  
+                                id="dt1" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{graficosController.dt1}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt2" id="dtMsg2" />
+                            <h:inputText  
+                                id="dt2" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{graficosController.dt2}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                        
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Estado: " for="estado" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="estado" id="estadoMsg" />
+                            <p:selectOneMenu 
+                                        class="col-lg-12"
+                                        id="estado"
+                                        value="#{graficosController.estadoSelectedId}" 
+                                        filter="true" 
+                                        required="required"
+                                        filterMatchMode="startsWith" style="width: 65%">
+                                <f:selectItem itemLabel="#{null}" pt:selected="true"/>
+                                <f:selectItems 
+                                    value="#{profgeralController.estados}" 
+                                    var="item"
+                                    itemLabel="#{item.descricao}"
+                                    itemValue="#{item.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Finalidade:" for="finalidade" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="finalidade" id="finalidadeMsg" />
+                            <h:inputText 
+                                id="finalidade"
+                                label="finalidade"
+                                class="form-control"
+                                value="#{graficosController.finalidade}" 
+                                pt:placeholder="Ex: E-SUS, APS, etc."/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup >
+                            <h:commandButton value="Gerar Relatório" action="#{graficosController.getMunicipiosMetasProfissionais}" class="btn btn-primary">
+                                <f:ajax execute="dt1 dt2 finalidade estado" render="reports" />
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+                
+                <div class="divider"></div>
+                <h:panelGroup id="reports">
+                    <ui:fragment rendered="#{graficosController.top15Prof}">
+                        <hr></hr>
+                        
+                        <div class="container-fluid" style="font-size: 16px">
+                            <div class="row">
+                                <div id="toolbar">
+                                    <select class="form-control">
+                                        <option value="">Exportar Básico</option>
+                                        <option value="all">Exportar Todos</option>
+                                        <option value="selected">Exportar Selecionados</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <table id="municipios-table" 
+                                        data-show-columns="true"
+                                        data-show-export="true"
+                                        data-pagination="true"
+                                        data-click-to-select="true"
+                                        data-toolbar="#toolbar"
+                                        data-show-toggle="true"
+                                        data-filter-control="true"
+                                        data-key-events="true"
+                                        class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="municipio" data-filter-control="input" data-sortable="true">Municipios</th>
+                                            <th data-field="quantidade" data-filter-control="input" data-sortable="true">Quantidade de participantes</th>
+                                            <th data-field="qtdPartsCadastrados" data-filter-control="input" data-sortable="true">Quantidade de participantes Cadastrados</th>
+                                            <th data-field="qtdCadastrados" data-filter-control="input" data-sortable="true">Quantidade de cadastrados</th>
+                                            <th data-field="qtdProfs" data-formatter="convertProgressBar" data-filter-control="input" data-sortable="true">Quantidade de participantes</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <script>
+                                    var $table = $a('#municipios-table');
+                                    $a(function () {
+                                        $a('#toolbar').find('select').change(function () {
+                                            $table.bootstrapTable('refreshOptions', {
+                                                exportDataType: $a(this).val()
+                                            });
+                                        });
+                                        var data = #{graficosController.jsonReportProfissionais};
+                                        $a($table).bootstrapTable({
+                                            showFilter: true, 
+                                            data: data
+                                        });
+                                    });
+                                    
+                                    
+                                    function convertProgressBar(value) {
+                                        if(value >= 0)
+                                            return '<div class="progress-bar-' + color(value) + ' "><div class="progress-bar progress-bar-' + color(value) + ' progress-bar-striped active" role="progressbar" style="width:' + value + '%"><font color="000000">' + value + '%</font></div></div>';
+                                        else 
+                                            return 'Município não cadastrado.';
+                                    }
+                                    
+                                    
+                                </script>
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </h:panelGroup>
+                
+            </h:form>
+                        
+        </ui:define>    
+    </ui:composition>
+</html>

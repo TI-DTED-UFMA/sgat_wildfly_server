@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left; border: 1px solid #4286f4;">
+                    #{presencaController.setSelectedData()}
+                    
+                    <div class="panel-heading" style="font-size: 18px; color: #4286f4; border-bottom: 1px solid #4286f4;">Remover Registro de Presença</div>
+                    
+                    <h:form>
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="ID da Participação:" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-2">
+                                <h:outputText
+                                    class="form-control"
+                                    value="#{presencaController.presenca.id}">
+                                </h:outputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                         <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Modalidade:" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <h:outputText
+                                    class="form-control"
+                                    value="#{presencaController.presenca.atividade.modalidade.descricao}">
+                                </h:outputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                         <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Tema:" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-10">
+                                <h:outputText
+                                    class="form-control"
+                                    value="#{presencaController.presenca.atividade.tema}">
+                                </h:outputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Nome:" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-4">
+                                <h:outputText
+                                    class="form-control"
+                                    value="#{presencaController.presenca.pessoa.nome} #{presencaController.presenca.pessoa.sobrenome}">
+                                </h:outputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="form-group row">
+                            <h:panelGroup class="col-sm-10">
+                                <h:panelGroup class="col-sm-offset-4">
+                                    <h:commandButton value="Deletar" 
+                                                     action="#{presencaController.delete()}" 
+                                                     class="btn btn-danger"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+            </div>
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>
