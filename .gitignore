@@ -24,4 +24,4 @@
 hs_err_pid*
 
 configs/mysql/database/
-configs/wildfly/
+configs/jboss_wildfly/*
