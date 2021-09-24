@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Editar usuário #{loginController.usuarioEdit.funcionario.pessoa.nome} #{loginController.usuarioEdit.funcionario.pessoa.sobrenome}
+                            </h1>
+                        </div>
+                    </div>
+                    <h:form id="formUser">
+                        <p:messages id="messages" />
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Nível de Acesso: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:message for="nivel" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                    <p:selectOneMenu id="nivel" 
+                                                    style="width: 100%"
+                                                    value="#{loginController.nivel}" >
+                                        <f:selectItems 
+                                            value="#{loginController.niveis}" 
+                                            var="item"
+                                            itemLabel="#{item.descricao}"
+                                            itemValue="#{item.nivel}"/>    
+                                   </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha1"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:outputLabel value="Confirmar Senha: " for="nivel" class="col-sm-2 control-label form-label-right" />
+                            <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:inputSecret id="senha2"
+                                        class="form-control col-sm-2"
+                                        value="#{loginController.password2}" 
+                                        requiredMessage="Senha obrigatória"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="form-group row">
+                            <h:panelGroup class="col-sm-offset-6">
+                                <h:commandButton value="Salvar" action="#{loginController.updateUsuario()}" class="btn btn-primary" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                    <h:panelGroup class="lightbox-wrapper" id="create_responsavel">
+                        <ui:include src="/forms/Create_Responsavel.xhtml"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="lightbox-wrapper" id="create_instituicao">
+                        <ui:include src="/forms/Create_Instituicao.xhtml"/>
+                    </h:panelGroup>            
+                </div>
+            </div>
+        </ui:define>    
+    </ui:composition>
+</html>
