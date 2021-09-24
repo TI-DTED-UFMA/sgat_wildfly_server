@@ -23,10 +23,12 @@ services:
     container_name: ${APP_CONTAINER_NAME}
     build: .
     restart: unless-stopped
+    depends_on: 
+      - mysql
     volumes:
       - ./configs/jboss_wildfly:/opt/jboss/wildfly
     ports:
-      - ${APP_PORT}:8080
+      - ${APP_PORT}:8081
       - ${APP_ADMIN_PORT}:9990
     networks:      
       rede:
@@ -35,6 +37,6 @@ services:
 networks:
   rede:
     ipam:
-      driver: bridge
+      driver: default
       config:
         - subnet: 10.5.0.0/16
