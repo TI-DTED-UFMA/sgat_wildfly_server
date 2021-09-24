@@ -18,7 +18,7 @@ services:
     networks:
       rede:
         ipv4_address: 10.5.0.2
-        
+
   app:
     container_name: ${APP_CONTAINER_NAME}
     build: .
@@ -35,6 +35,6 @@ services:
 networks:
   rede:
     ipam:
-    driver: bridge
+      driver: bridge
       config:
-      - subnet: 10.5.0.0/16
+        - subnet: 10.5.0.0/16
